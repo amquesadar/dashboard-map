@@ -1,6 +1,6 @@
-# Dashboard de Monserrate Tour Map
+# Dashboard de Bogotá Tour Map
 
-Este proyecto muestra un recorrido en Monserrate integrado con Google Maps, marcadores de hitos, puntos de interés y paneles de análisis (Chart.js). Se ha modularizado para facilitar mantenimiento y extensión.
+Este proyecto muestra un recorrido en el sur de Bogotá integrado con Google Maps, marcadores de hitos, puntos de interés y paneles de análisis (Chart.js). Se ha modularizado para facilitar mantenimiento y extensión.
 
 ---
 
@@ -9,7 +9,7 @@ Este proyecto muestra un recorrido en Monserrate integrado con Google Maps, marc
 - Integración con Google Maps mediante carga dinámica de script  
 - Trazado de ruta entre dos puntos (Inicio / Fin)  
 - Círculos de 4 m de radio alrededor de cada hito  
-- Generación aleatoria de personas y POIs dentro del área delimitada  
+- Generación aleatoria de personas y POIs (points of interest) dentro del área delimitada  
 - Panel de análisis con tres gráficos horizontales:  
   - Distribución socioeconómica (clases A–E)  
   - Distribución por edad (0–17, 18–35, 36–50, 51–65, 66+)  
