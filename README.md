@@ -1,61 +1,116 @@
-# Dashboard
+# Dashboard de Monserrate Tour Map
 
-This template should help get you started developing with Vue 3 in Vite.
+Este proyecto muestra un recorrido en Monserrate integrado con Google Maps, marcadores de hitos, puntos de interés y paneles de análisis (Chart.js). Se ha modularizado para facilitar mantenimiento y extensión.
 
-## Recommended IDE Setup
+---
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+## Características principales
 
-## Type Support for `.vue` Imports in TS
+- Integración con Google Maps mediante carga dinámica de script  
+- Trazado de ruta entre dos puntos (Inicio / Fin)  
+- Círculos de 4 m de radio alrededor de cada hito  
+- Generación aleatoria de personas y POIs dentro del área delimitada  
+- Panel de análisis con tres gráficos horizontales:  
+  - Distribución socioeconómica (clases A–E)  
+  - Distribución por edad (0–17, 18–35, 36–50, 51–65, 66+)  
+  - Conteo de Puntos de Interés (Restaurantes, Parques, Museos, Hospitales)  
+- Barra de búsqueda de lugares con paneo automático  
+- Botones para alternar capas: Lugares, Hitos, Personas, POIs y Analíticas  
+- Selector de tipo de mapa (Mapa ↔ Satélite)  
+- Zoom in / Zoom out / Recentrar  
+- Modularización por componentes y composables
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+---
 
-## Customize configuration
+## Estructura del proyecto
 
-See [Vite Configuration Reference](https://vite.dev/config/).
-
-## Project Setup
-
-```sh
-npm install
+```text
+src/
+├── assets/                 
+│   └── logos, íconos  
+├── components/            
+│   ├── AppHeader.vue       # Encabezado con búsqueda y toggle
+│   ├── MapSection.vue      # Mapa + controles + toggles  
+│   ├── AnalyticsSection.vue# Panel de gráficos Chart.js  
+│   ├── Controls.vue        # Botones de zoom/recentrado/tipo de mapa  
+│   └── Toggles.vue         # Alterna visibilidad de capas  
+├── composables/            
+│   ├── useGoogleMaps.ts    # Loader e init de Google Maps  
+│   ├── useRouteOverlay.ts  # Ruta, hitos y círculo de mitad de trayecto  
+│   ├── useLayerManager.ts  # Gestión de marcadores por capas  
+│   ├── useControls.ts      # Funciones de zoom y recentrar  
+│   └── useMockData.ts      # Genera datos mock: personas, places, pois  
+├── styles/                 
+│   └── app.css             # Estilos globales  
+├── App.vue                 # Orquestador principal  
+└── main.js                 # Bootstrapping de Vue + estilos  
 ```
 
-### Compile and Hot-Reload for Development
+# Componentes
+AppHeader.vue
+Logo, input de búsqueda y sugerencias
 
-```sh
-npm run dev
-```
+Toggle de tipo de mapa
 
-### Type-Check, Compile and Minify for Production
+Emite eventos go-to(place) y set-map-type(type)
 
-```sh
-npm run build
-```
+MapSection.vue
+Contenedor del mapa (ref="mapRef")
 
-### Run Unit Tests with [Vitest](https://vitest.dev/)
+Uso de composables para inicializar y actualizar overlays
 
-```sh
-npm run test:unit
-```
+Incorpora <Controls> y <Toggles>
 
-### Run End-to-End Tests with [Cypress](https://www.cypress.io/)
+AnalyticsSection.vue
+Tres <canvas> para Chart.js
 
-```sh
-npm run test:e2e:dev
-```
+Carga dinámica de la librería Chart.js
 
-This runs the end-to-end tests against the Vite development server.
-It is much faster than the production build.
+Recibe props: personas, clasesSocio, gruposEdad, pois, poiCats
 
-But it's still recommended to test the production build with `test:e2e` before deploying (e.g. in CI environments):
+Composables
+useGoogleMaps.ts
+Función loadGoogleMaps(apiKey) para inyectar el script
 
-```sh
-npm run build
-npm run test:e2e
-```
+Refs: mapRef, map
 
-### Lint with [ESLint](https://eslint.org/)
+Método initMap(center, zoom, mapTypeId)
 
-```sh
-npm run lint
-```
+Método setMapType(type)
+
+useRouteOverlay.ts
+Calcula routeCoords, milestones[], midpoint, radius
+
+Funciones drawRoute() y drawCircle()
+
+useLayerManager.ts
+Gestión de marcadores: addPlaces(), removePlaces(), etc.
+
+Estado reactivo layers (places, milestones, people, pois)
+
+Funciones toggleLayer(layer) y addAll()
+
+useControls.ts
+Funciones de control: acercar(), alejar(), recentrar()
+
+Utiliza el ref map y el centro inicial
+
+useMockData.ts
+Arrays estáticos: places, clasesSocio, gruposEdad, poiCats
+
+Genera datos aleatorios: personas[] y pois[]
+
+Proceso de modularización
+Partir de un App.vue monolítico con toda la lógica y estilos inline.
+
+Extraer estilos a src/styles/app.css.
+
+Separar la cabecera en AppHeader.vue.
+
+Extraer panel de gráficos a AnalyticsSection.vue.
+
+Crear MapSection.vue y componentes auxiliares (Controls.vue, Toggles.vue).
+
+Factorizar lógica de mapas y datos en composables (5 módulos).
+
+Simplificar App.vue para que solo orqueste props y estados globales.
