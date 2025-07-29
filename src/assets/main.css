@@ -1,0 +1,50 @@
+/* 1. Tailwind directives */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 2. Global overrides */
+:root {
+  --color-bg: #f9fafb;
+}
+
+/* Ensure full-height layout for the map */
+html,
+body,
+#app {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background: var(--color-bg);
+  font-family: Inter, sans-serif;
+}
+
+/* 3. Map container styling */
+.map-container {
+  width: 100%;
+  height: 100%;
+  background: #e5e7eb; /* light-gray fallback */
+}
+
+/* 4. Main wrapper must reserve space for header (64px height) */
+main {
+  position: relative;
+  height: calc(100vh - 64px);
+}
+
+/* 5. Controls positioning */
+.map-controls {
+  @apply absolute top-4 left-4;
+}
+
+/* 6. Legend styling */
+.legend {
+  @apply absolute bottom-4 left-4 bg-white bg-opacity-80 p-2 rounded shadow;
+  list-style: none;
+  margin: 0;
+}
+
+.legend li {
+  margin-bottom: 0.25rem;
+  font-size: 0.875rem;
+}
